@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Sistemas Inteligentes com Arduino — Três desafios práticos explorando sensores, programação e automação com Arduino." />
+  <meta name="theme-color" content="#0a0f1e" />
+  <title>INTELLIGENT SYSTEMS LAB — Arduino</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ===================== LOADING SCREEN ===================== -->
+  <div id="loading-screen" aria-label="Carregando sistema" role="status">
+    <div class="loader-content">
+      <div class="loader-logo">
+        <span class="loader-bracket">[</span>
+        <span class="loader-title">ISL</span>
+        <span class="loader-bracket">]</span>
+      </div>
+      <div class="loader-status" id="loader-status">INITIALIZING SYSTEM...</div>
+      <div class="loader-bar-wrapper">
+        <div class="loader-bar" id="loader-bar"></div>
+      </div>
+      <div class="loader-percent" id="loader-percent">0%</div>
+      <div class="loader-modules" id="loader-modules">
+        <div class="loader-module" id="lm1">▸ LOADING ARDUINO MODULES</div>
+        <div class="loader-module" id="lm2">▸ LOADING SENSORS</div>
+        <div class="loader-module" id="lm3">▸ LOADING EXPERIMENTS</div>
+      </div>
+      <div class="loader-ready" id="loader-ready">SYSTEM READY</div>
+    </div>
+    <canvas id="loader-canvas"></canvas>
+  </div>
+
+  <!-- ===================== HEADER ===================== -->
+  <header id="main-header" role="banner">
+    <div class="header-inner">
+      <a href="#hero" class="header-logo" aria-label="Ir para o início">
+        <div class="logo-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <rect x="1" y="1" width="30" height="30" rx="4" stroke="#00d4ff" stroke-width="1.5"/>
+            <path d="M8 16h4M20 16h4M16 8v4M16 20v4" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="16" cy="16" r="3" fill="#00d4ff" opacity="0.8"/>
+            <circle cx="8" cy="8" r="1.5" fill="#00d4ff" opacity="0.4"/>
+            <circle cx="24" cy="8" r="1.5" fill="#00d4ff" opacity="0.4"/>
+            <circle cx="8" cy="24" r="1.5" fill="#00d4ff" opacity="0.4"/>
+            <circle cx="24" cy="24" r="1.5" fill="#00d4ff" opacity="0.4"/>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span class="logo-main">ISL</span>
+          <span class="logo-sub">INTELLIGENT SYSTEMS LAB</span>
+        </div>
+      </a>
+
+      <nav id="main-nav" aria-label="Navegação principal">
+        <ul class="nav-list" role="list">
+          <li><a href="#hero" class="nav-link active" data-section="hero">Início</a></li>
+          <li><a href="#desafio01" class="nav-link" data-section="desafio01">Desafio 01</a></li>
+          <li><a href="#desafio02" class="nav-link" data-section="desafio02">Desafio 02</a></li>
+          <li><a href="#desafio03" class="nav-link" data-section="desafio03">Desafio 03</a></li>
+          <li><a href="#resultados" class="nav-link" data-section="resultados">Resultados</a></li>
+        </ul>
+      </nav>
+
+      <button id="hamburger" class="hamburger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu" role="dialog" aria-label="Menu de navegação" aria-modal="true" hidden>
+      <div class="mobile-menu-inner">
+        <button class="mobile-close" id="mobile-close" aria-label="Fechar menu">✕</button>
+        <nav>
+          <ul class="mobile-nav-list" role="list">
+            <li><a href="#hero" class="mobile-nav-link">
+              <span class="mnl-num">00</span>Início
+            </a></li>
+            <li><a href="#desafio01" class="mobile-nav-link">
+              <span class="mnl-num">01</span>Iluminação Inteligente
+            </a></li>
+            <li><a href="#desafio02" class="mobile-nav-link">
+              <span class="mnl-num">02</span>Distância e Iluminação
+            </a></li>
+            <li><a href="#desafio03" class="mobile-nav-link">
+              <span class="mnl-num">03</span>Ambiente Inteligente
+            </a></li>
+            <li><a href="#resultados" class="mobile-nav-link">
+              <span class="mnl-num">04</span>Resultados
+            </a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== MAIN CONTENT ===================== -->
+  <main id="main-content">
+
+    <!-- ===================== HERO SECTION ===================== -->
+    <section id="hero" class="section-hero" aria-label="Apresentação principal">
+      <canvas id="hero-canvas" aria-hidden="true"></canvas>
+
+      <div class="hero-content">
+        <div class="hero-text">
+          <div class="hero-badge" aria-label="Tags do projeto">
+            <span>PROJECT</span>
+            <span class="badge-sep">/</span>
+            <span>ARDUINO</span>
+            <span class="badge-sep">/</span>
+            <span>AUTOMATION</span>
+          </div>
+          <h1 class="hero-title">
+            <span class="hero-title-line">SISTEMAS</span>
+            <span class="hero-title-line accent">INTELIGENTES</span>
+            <span class="hero-title-line">COM ARDUINO</span>
+          </h1>
+          <p class="hero-subtitle">
+            Explorando sensores, programação e automação através de três desafios práticos.
+          </p>
+          <div class="hero-actions">
+            <a href="#overview" class="btn btn-primary" id="btn-explorar">
+              <span class="btn-icon">◉</span>
+              EXPLORAR PROJETO
+            </a>
+            <a href="#desafio01" class="btn btn-secondary" id="btn-desafios">
+              <span class="btn-icon">▶</span>
+              VER DESAFIOS
+            </a>
+          </div>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <span class="stat-num">03</span>
+              <span class="stat-label">Desafios</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="hero-stat">
+              <span class="stat-num">06</span>
+              <span class="stat-label">Sensores</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="hero-stat">
+              <span class="stat-num">01</span>
+              <span class="stat-label">Arduino</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <div class="circuit-board">
+            <div class="cb-center">
+              <div class="cb-pulse"></div>
+              <div class="cb-core">
+                <svg width="70" height="70" viewBox="0 0 70 70" fill="none">
+                  <rect x="10" y="10" width="50" height="50" rx="8" stroke="#00d4ff" stroke-width="1.5" fill="rgba(0,212,255,0.05)"/>
+                  <rect x="20" y="20" width="30" height="30" rx="4" stroke="#00d4ff" stroke-width="1" fill="rgba(0,212,255,0.08)"/>
+                  <text x="35" y="40" text-anchor="middle" fill="#00d4ff" font-family="Orbitron" font-size="10" font-weight="700">UNO</text>
+                  <line x1="10" y1="35" x2="0" y2="35" stroke="#00d4ff" stroke-width="1" opacity="0.6"/>
+                  <line x1="60" y1="35" x2="70" y2="35" stroke="#00d4ff" stroke-width="1" opacity="0.6"/>
+                  <line x1="35" y1="10" x2="35" y2="0" stroke="#00d4ff" stroke-width="1" opacity="0.6"/>
+                  <line x1="35" y1="60" x2="35" y2="70" stroke="#00d4ff" stroke-width="1" opacity="0.6"/>
+                </svg>
+              </div>
+            </div>
+
+            <div class="cb-nodes">
+              <div class="cb-node node-pir" data-label="PIR">
+                <div class="node-dot"></div>
+                <span class="node-label">PIR</span>
+              </div>
+              <div class="cb-node node-ldr" data-label="LDR">
+                <div class="node-dot"></div>
+                <span class="node-label">LDR</span>
+              </div>
+              <div class="cb-node node-ultra" data-label="ULTRASSÔNICO">
+                <div class="node-dot"></div>
+                <span class="node-label">HC-SR04</span>
+              </div>
+              <div class="cb-node node-pot" data-label="POT">
+                <div class="node-dot"></div>
+                <span class="node-label">POT</span>
+              </div>
+              <div class="cb-node node-dht" data-label="DHT">
+                <div class="node-dot"></div>
+                <span class="node-label">DHT</span>
+              </div>
+              <div class="cb-node node-led" data-label="LED">
+                <div class="node-dot node-dot-green"></div>
+                <span class="node-label">LED</span>
+              </div>
+            </div>
+
+            <svg class="cb-lines" viewBox="0 0 400 400" fill="none" aria-hidden="true">
+              <path class="circuit-path" d="M200 200 L80 80" stroke="#00d4ff" stroke-width="1" opacity="0.3"/>
+              <path class="circuit-path" d="M200 200 L320 80" stroke="#00d4ff" stroke-width="1" opacity="0.3"/>
+              <path class="circuit-path" d="M200 200 L60 200" stroke="#00d4ff" stroke-width="1" opacity="0.3"/>
+              <path class="circuit-path" d="M200 200 L340 200" stroke="#00d4ff" stroke-width="1" opacity="0.3"/>
+              <path class="circuit-path" d="M200 200 L120 330" stroke="#00d4ff" stroke-width="1" opacity="0.3"/>
+              <path class="circuit-path" d="M200 200 L290 330" stroke="#00d4ff" stroke-width="1" opacity="0.3"/>
+              <circle cx="200" cy="200" r="60" stroke="#00d4ff" stroke-width="0.5" opacity="0.15" stroke-dasharray="4 8"/>
+              <circle cx="200" cy="200" r="110" stroke="#00d4ff" stroke-width="0.5" opacity="0.1" stroke-dasharray="2 12"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-scroll-indicator" aria-label="Role para baixo">
+        <span>SCROLL</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+    <!-- ===================== OVERVIEW SECTION ===================== -->
+    <section id="overview" class="section-overview reveal-section" aria-label="Visão geral do projeto">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">VISÃO GERAL</div>
+          <h2 class="section-title">VISÃO GERAL DO PROJETO</h2>
+          <p class="section-desc">Três sistemas desenvolvidos com Arduino, cada um explorando diferentes sensores e lógicas de automação.</p>
+        </div>
+
+        <div class="overview-grid">
+          <a href="#desafio01" class="overview-card reveal-item" aria-label="Ir para Desafio 01 - Iluminação Inteligente">
+            <div class="oc-number">01</div>
+            <div class="oc-icon oc-icon-cyan">
+              <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+                <circle cx="18" cy="18" r="8" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M18 4V8M18 28V32M4 18H8M28 18H32M7.5 7.5L10.5 10.5M25.5 25.5L28.5 28.5M28.5 7.5L25.5 10.5M10.5 25.5L7.5 28.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3 class="oc-title">ILUMINAÇÃO<br>INTELIGENTE</h3>
+            <p class="oc-chips">PIR + LDR + LED</p>
+            <p class="oc-desc">Detecção de presença combinada com leitura de luminosidade para acionamento automático de LED.</p>
+            <div class="oc-arrow">→</div>
+          </a>
+
+          <a href="#desafio02" class="overview-card reveal-item" style="--card-color: #a855f7" aria-label="Ir para Desafio 02 - Distância e Iluminação">
+            <div class="oc-number">02</div>
+            <div class="oc-icon oc-icon-purple">
+              <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+                <path d="M4 18H32M4 18L10 12M4 18L10 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="26" cy="18" r="6" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="26" cy="18" r="2" fill="currentColor"/>
+              </svg>
+            </div>
+            <h3 class="oc-title">DISTÂNCIA E<br>ILUMINAÇÃO</h3>
+            <p class="oc-chips">Ultrassônico + Potenciômetro + LED</p>
+            <p class="oc-desc">Medição de distância com sensor ultrassônico e controle de referência via potenciômetro.</p>
+            <div class="oc-arrow">→</div>
+          </a>
+
+          <a href="#desafio03" class="overview-card reveal-item" style="--card-color: #22c55e" aria-label="Ir para Desafio 03 - Ambiente Inteligente">
+            <div class="oc-number">03</div>
+            <div class="oc-icon oc-icon-green">
+              <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+                <rect x="12" y="6" width="12" height="18" rx="6" stroke="currentColor" stroke-width="1.5"/>
+                <line x1="18" y1="24" x2="18" y2="30" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="14" y1="30" x2="22" y2="30" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M24 10C26 11.5 27 13.5 27 16C27 18.5 26 20.5 24 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M12 10C10 11.5 9 13.5 9 16C9 18.5 10 20.5 12 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3 class="oc-title">AMBIENTE<br>INTELIGENTE</h3>
+            <p class="oc-chips">Temperatura + Umidade + LEDs</p>
+            <p class="oc-desc">Monitoramento de temperatura e umidade com indicação visual de status por LEDs coloridos.</p>
+            <div class="oc-arrow">→</div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== DESAFIO 01 ===================== -->
+    <section id="desafio01" class="section-challenge challenge-01 reveal-section" aria-label="Desafio 01 - Iluminação Inteligente">
+      <div class="challenge-bg-number" aria-hidden="true">01</div>
+      <div class="container">
+        <div class="challenge-header">
+          <div class="challenge-tag-line">
+            <div class="challenge-tag">DESAFIO 01</div>
+            <div class="challenge-system-id">SYSTEM / PRESENCE / LIGHT</div>
+          </div>
+          <h2 class="challenge-title">ILUMINAÇÃO<br><span class="accent">INTELIGENTE</span></h2>
+        </div>
+
+        <div class="challenge-body">
+          <!-- Objetivo -->
+          <div class="challenge-block reveal-item">
+            <div class="block-label">▸ OBJETIVO</div>
+            <p class="block-text">
+              O objetivo deste desafio foi desenvolver um sistema de iluminação automática utilizando um sensor <strong>PIR</strong> para detectar presença e um sensor <strong>LDR</strong> para identificar a luminosidade do ambiente. O LED é acionado somente quando há movimento e o ambiente está escuro.
+            </p>
+          </div>
+
+          <!-- Lógica de Funcionamento -->
+          <div class="challenge-block reveal-item">
+            <div class="block-label">▸ LÓGICA DE FUNCIONAMENTO</div>
+            <div class="logic-area">
+              <div class="flow-diagram">
+                <div class="flow-node flow-sensor">
+                  <div class="fn-icon">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                      <circle cx="10" cy="10" r="5" stroke="currentColor" stroke-width="1.5"/>
+                      <path d="M10 2V5M10 15V18M2 10H5M15 10H18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                  </div>
+                  <span>SENSOR PIR</span>
+                </div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-node flow-process">
+                  <span>DETECÇÃO DE MOVIMENTO</span>
+                </div>
+                <div class="flow-split">
+                  <div class="flow-branch">
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-node flow-sensor">
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                        <circle cx="10" cy="10" r="4" stroke="currentColor" stroke-width="1.5"/>
+                        <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1" stroke-dasharray="2 3" opacity="0.5"/>
+                      </svg>
+                      <span>SENSOR LDR</span>
+                    </div>
+                  </div>
+                  <div class="flow-branch">
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-node flow-condition">
+                      <span>AMBIENTE ESCURO?</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-node flow-decision">
+                  <span>DECISÃO LÓGICA</span>
+                </div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-node flow-output">
+                  <div class="fn-led fn-led-yellow"></div>
+                  <span>LED</span>
+                </div>
+              </div>
+
+              <div class="logic-condition-highlight">
+                <div class="lch-text">
+                  <span class="lch-input">MOVIMENTO + AMBIENTE ESCURO</span>
+                  <span class="lch-arrow">→</span>
+                  <span class="lch-output">LED LIGADO</span>
+                </div>
+              </div>
+
+              <!-- Truth Table -->
+              <div class="truth-table-wrapper">
+                <div class="tt-label">TABELA DE ESTADOS</div>
+                <table class="truth-table" aria-label="Tabela de estados do sistema de iluminação">
+                  <thead>
+                    <tr>
+                      <th>Movimento</th>
+                      <th>Luminosidade</th>
+                      <th>LED</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="tt-off">✕ Não</span></td>
+                      <td>Claro</td>
+                      <td><span class="tt-off">Desligado</span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="tt-off">✕ Não</span></td>
+                      <td>Escuro</td>
+                      <td><span class="tt-off">Desligado</span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="tt-on">✓ Sim</span></td>
+                      <td>Claro</td>
+                      <td><span class="tt-off">Desligado</span></td>
+                    </tr>
+                    <tr class="tt-highlight">
+                      <td><span class="tt-on">✓ Sim</span></td>
+                      <td>Escuro</td>
+                      <td><span class="tt-active">● Ligado</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video -->
+          <div class="challenge-block reveal-item">
+            <div class="block-label">▸ DEMONSTRAÇÃO</div>
+            <div class="video-player-wrapper">
+              <div class="video-player-frame">
+                <div class="vpf-corner vpf-tl"></div>
+                <div class="vpf-corner vpf-tr"></div>
+                <div class="vpf-corner vpf-bl"></div>
+                <div class="vpf-corner vpf-br"></div>
+                <div class="vpf-header">
+                  <span class="vpf-dot vpf-red"></span>
+                  <span class="vpf-dot vpf-yellow"></span>
+                  <span class="vpf-dot vpf-green"></span>
+                  <span class="vpf-title">DEMO_01 — ILUMINAÇÃO INTELIGENTE</span>
+                </div>
+                <video
+                  controls
+                  preload="metadata"
+                  class="challenge-video"
+                  aria-label="Demonstração do Desafio 01 - Iluminação Inteligente"
+                >
+                  <source src="videos/1.mp4" type="video/mp4" />
+                  <p>Seu navegador não suporta reprodução de vídeo. <a href="videos/1.mp4">Baixe o vídeo</a>.</p>
+                </video>
+              </div>
+            </div>
+          </div>
+
+          <!-- Código -->
+          <div class="challenge-block reveal-item">
+            <div class="block-label">▸ CÓDIGO</div>
+            <div class="code-editor-wrapper" id="code-editor-01">
+              <div class="ce-header">
+                <div class="ce-dots">
+                  <span class="ce-dot" style="background:#ff5f56"></span>
+                  <span class="ce-dot" style="background:#ffbd2e"></span>
+                  <span class="ce-dot" style="background:#27c93f"></span>
+                </div>
+                <span class="ce-filename">desafio_01_iluminacao.ino</span>
+                <div class="ce-actions">
+                  <button class="btn-expand" data-target="code-01" aria-label="Expandir/recolher código" aria-expanded="false">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 5V1H5M9 1H13V5M13 9V13H9M5 13H1V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    <span>EXPANDIR</span>
+                  </button>
+                  <button class="btn-copy" data-target="code-01-content" aria-label="Copiar código do Desafio 01">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="4" y="4" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 4V2.5C10 1.67 9.33 1 8.5 1H1.5C0.67 1 0 1.67 0 2.5V9.5C0 10.33 0.67 11 1.5 11H4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    <span>COPIAR</span>
+                  </button>
+                </div>
+              </div>
+              <div class="ce-body collapsed" id="code-01">
+                <pre class="ce-pre" id="code-01-content" aria-label="Código do Desafio 01"><code class="code-arduino"><span class="c-comment">// ═══════════════════════════════════════════════════════
+// DESAFIO 01 — ILUMINAÇÃO INTELIGENTE
+// Sensor PIR + Sensor LDR + LED
+// ═══════════════════════════════════════════════════════</span>
+
+<span class="c-comment">// ── Definição dos pinos ──────────────────────────────</span>
+<span class="c-keyword">const int</span> <span class="c-var">pinoLED</span>  = <span class="c-number">13</span>;   <span class="c-comment">// LED de saída</span>
+<span class="c-keyword">const int</span> <span class="c-var">pinoPIR</span>  = <span class="c-number">7</span>;    <span class="c-comment">// Sensor de presença PIR</span>
+<span class="c-keyword">const int</span> <span class="c-var">pinoLDR</span>  = <span class="c-number">A0</span>;   <span class="c-comment">// Sensor de luminosidade LDR</span>
+
+<span class="c-comment">// ── Parâmetros configuráveis ─────────────────────────</span>
+<span class="c-keyword">const int</span> <span class="c-var">limiarLDR</span> = <span class="c-number">500</span>;  <span class="c-comment">// Limiar: abaixo = escuro</span>
+
+<span class="c-comment">// ── Variáveis de estado ──────────────────────────────</span>
+<span class="c-keyword">int</span> <span class="c-var">estadoPIR</span>  = <span class="c-number">0</span>;
+<span class="c-keyword">int</span> <span class="c-var">valorLDR</span>   = <span class="c-number">0</span>;
+
+<span class="c-comment">// ────────────────────────────────────────────────────</span>
+<span class="c-keyword">void</span> <span class="c-fn">setup</span>() {
+  <span class="c-fn">pinMode</span>(<span class="c-var">pinoLED</span>, <span class="c-const">OUTPUT</span>);
+  <span class="c-fn">pinMode</span>(<span class="c-var">pinoPIR</span>, <span class="c-const">INPUT</span>);
+  <span class="c-comment">// pinoLDR é analógico — não precisa de pinMode</span>
+  <span class="c-fn">Serial</span>.<span class="c-fn">begin</span>(<span class="c-number">9600</span>);
+  <span class="c-fn">Serial</span>.<span class="c-fn">println</span>(<span class="c-string">"Sistema iniciado: Iluminação Inteligente"</span>);
+}
+
+<span class="c-comment">// ────────────────────────────────────────────────────</span>
+<span class="c-keyword">void</span> <span class="c-fn">loop</span>() {
+  <span class="c-comment">// Leitura dos sensores</span>
+  <span class="c-var">estadoPIR</span> = <span class="c-fn">digitalRead</span>(<span class="c-var">pinoPIR</span>);
+  <span class="c-var">valorLDR</span>  = <span class="c-fn">analogRead</span>(<span class="c-var">pinoLDR</span>);
+
+  <span class="c-comment">// Condição: movimento E ambiente escuro</span>
+  <span class="c-keyword">if</span> (<span class="c-var">estadoPIR</span> == <span class="c-const">HIGH</span> &amp;&amp; <span class="c-var">valorLDR</span> &lt; <span class="c-var">limiarLDR</span>) {
+    <span class="c-fn">digitalWrite</span>(<span class="c-var">pinoLED</span>, <span class="c-const">HIGH</span>);   <span class="c-comment">// Liga o LED</span>
+    <span class="c-fn">Serial</span>.<span class="c-fn">println</span>(<span class="c-string">"[ON] Movimento + Escuro → LED LIGADO"</span>);
+  } <span class="c-keyword">else</span> {
+    <span class="c-fn">digitalWrite</span>(<span class="c-var">pinoLED</span>, <span class="c-const">LOW</span>);    <span class="c-comment">// Desliga o LED</span>
+    <span class="c-fn">Serial</span>.<span class="c-fn">println</span>(<span class="c-string">"[OFF] Condição não atendida → LED DESLIGADO"</span>);
+  }
+
+  <span class="c-fn">delay</span>(<span class="c-number">200</span>);
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== TRANSITION 01→02 ===================== -->
+    <div class="transition-block" aria-hidden="true">
+      <div class="tb-inner">
+        <div class="tb-status">
+          <div class="tb-dot tb-dot-complete"></div>
+          <span>SYSTEM 01 COMPLETED</span>
+        </div>
+        <div class="tb-line">
+          <div class="tb-line-progress"></div>
+          <div class="tb-data-flow">
+            <span class="df-bit">1</span><span class="df-bit">0</span>
+            <span class="df-bit">1</span><span class="df-bit">1</span>
+            <span class="df-bit">0</span><span class="df-bit">1</span>
+          </div>
+        </div>
+        <div class="tb-next">
+          <span>NEXT MODULE</span>
+          <div class="tb-next-title">▼ DISTANCE SYSTEM</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DESAFIO 02 ===================== -->
+    <section id="desafio02" class="section-challenge challenge-02 reveal-section" aria-label="Desafio 02 - Distância e Iluminação">
+      <div class="challenge-bg-number" aria-hidden="true">02</div>
+      <div class="container">
+        <div class="challenge-header challenge-header-alt">
+          <div class="challenge-tag-line">
+            <div class="challenge-tag challenge-tag-purple">DESAFIO 02</div>
+            <div class="challenge-system-id">SYSTEM / DISTANCE / CONTROL</div>
+          </div>
+          <h2 class="challenge-title">DISTÂNCIA E<br><span class="accent-purple">ILUMINAÇÃO</span></h2>
+        </div>
+
+        <div class="challenge-body">
+          <!-- Objetivo -->
+          <div class="challenge-block reveal-item">
+            <div class="block-label">▸ OBJETIVO</div>
+            <p class="block-text">
+              O objetivo foi utilizar um sensor <strong>ultrassônico</strong> para medir a distância entre o sensor e um objeto. Um <strong>potenciômetro</strong> foi utilizado para ajustar o limite de referência. O comportamento do LED é definido pela comparação entre a distância medida e o limite configurado.
+            </p>
+          </div>
+
+          <!-- Funcionamento -->
+          <div class="challenge-block reveal-item">
+            <div class="block-label">▸ LÓGICA DE FUNCIONAMENTO</div>
+            <div class="logic-area logic-area-02">
+              <div class="logic-two-col">
+                <div class="l2c-col">
+                  <div class="flow-diagram">
+                    <div class="flow-node flow-sensor" style="--node-color: var(--purple)">
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                        <path d="M2 10 Q6 4 10 10 Q14 16 18 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                      </svg>
+                      <span>OBJETO</span>
+                    </div>
+                    <div class="flow-arrow flow-arrow-purple">↓</div>
+                    <div class="flow-node flow-sensor" style="--node-color: var(--purple)">
+                      <span>SENSOR ULTRASSÔNICO</span>
+                    </div>
+                    <div class="flow-arrow flow-arrow-purple">↓</div>
+                    <div class="flow-node flow-process" style="--node-color: var(--purple)">
+                      <span>DISTÂNCIA MEDIDA</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="l2c-divider" aria-hidden="true"></div>
+
+                <div class="l2c-col">
+                  <div class="flow-diagram">
+                    <div class="flow-node flow-sensor" style="--node-color: var(--purple)">
+                      <span>POTENCIÔMETRO</span>
+                    </div>
+                    <div class="flow-arrow flow-arrow-purple">↓</div>
+                    <div class="flow-node flow-process" style="--node-color: var(--purple)">
+                      <span>LIMITE DEFINIDO</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flow-merge">
+                <div class="flow-merge-lines" aria-hidden="true"></div>
+                <div class="flow-node flow-decision" style="--node-color: var(--purple)">
+                  <span>COMPARAÇÃO</span>
+                </div>
+                <div class="flow-arrow flow-arrow-purple">↓</div>
+                <div class="flow-node flow-output">
+                  <div class="fn-led fn-led-purple"></div>
+                  <span>LED</span>
+                </div>
+              </div>
+
+              <!-- Potentiometer Visual -->
+              <div class="pot-visual-area">
+                <div class="pot-label-row">
+                  <div class="pv-label">▸ POTENCIÔMETRO — CONTROLE DO LIMITE</div>
+                </div>
+                <p class="pot-desc">O potenciômetro permite alterar manualmente o valor de referência do sistema. Ao girá-lo, o limite utilizado para comparar a distância é modificado.</p>
+                <div class="pot-scale-wrapper">
+                  <span class="pot-scale-label">MENOR LIMITE</span>
+                  <div class="pot-scale-track" aria-label="Escala de ajuste do potenciômetro">
+                    <div class="pot-scale-fill"></div>
+                    <div class="pot-scale-thumb" id="pot-thumb"></div>
+                  </div>
+                  <span class="pot-scale-label">MAIOR LIMITE</span>
+                </div>
+                <div class="pot-value-display">
+                  LIMITE: <span id="pot-value-display">512</span> / 1023
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video -->
+          <div class="challenge-block reveal-item">
+            <div class="block-label">▸ DEMONSTRAÇÃO</div>
+            <div class="video-player-wrapper video-alt">
+              <div class="video-player-frame vpf-purple">
+                <div class="vpf-corner vpf-tl"></div>
+                <div class="vpf-corner vpf-tr"></div>
+                <div class="vpf-corner vpf-bl"></div>
+                <div class="vpf-corner vpf-br"></div>
+                <div class="vpf-header">
+                  <span class="vpf-dot vpf-red"></span>
+                  <span class="vpf-dot vpf-yellow"></span>
+                  <span class="vpf-dot vpf-green"></span>
+                  <span class="vpf-title">DEMO_02 — DISTÂNCIA E ILUMINAÇÃO</span>
+                </div>
+                <video
+                  controls
+                  preload="metadata"
+                  class="challenge-video"
+                  aria-label="Demonstração do Desafio 02 - Distância e Iluminação"
+                >
+                  <source src="videos/2.mp4" type="video/mp4" />
+                  <p>Seu navegador não suporta reprodução de vídeo. <a href="videos/2.mp4">Baixe o vídeo</a>.</p>
+                </video>
+              </div>
+            </div>
+          </div>
+
+          <!-- Código -->
+          <div class="challenge-block reveal-item">
+            <div class="block-label">▸ CÓDIGO</div>
+            <div class="code-editor-wrapper" id="code-editor-02">
+              <div class="ce-header">
+                <div class="ce-dots">
+                  <span class="ce-dot" style="background:#ff5f56"></span>
+                  <span class="ce-dot" style="background:#ffbd2e"></span>
+                  <span class="ce-dot" style="background:#27c93f"></span>
+                </div>
+                <span class="ce-filename">desafio_02_distancia.ino</span>
+                <div class="ce-actions">
+                  <button class="btn-expand" data-target="code-02" aria-label="Expandir/recolher código" aria-expanded="false">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 5V1H5M9 1H13V5M13 9V13H9M5 13H1V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    <span>EXPANDIR</span>
+                  </button>
+                  <button class="btn-copy" data-target="code-02-content" aria-label="Copiar código do Desafio 02">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="4" y="4" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 4V2.5C10 1.67 9.33 1 8.5 1H1.5C0.67 1 0 1.67 0 2.5V9.5C0 10.33 0.67 11 1.5 11H4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    <span>COPIAR</span>
+                  </button>
+                </div>
+              </div>
+              <div class="ce-body collapsed" id="code-02">
+                <pre class="ce-pre" id="code-02-content" aria-label="Código do Desafio 02"><code class="code-arduino"><span class="c-comment">// ═══════════════════════════════════════════════════════
+// DESAFIO 02 — DISTÂNCIA E ILUMINAÇÃO
+// Sensor Ultrassônico + Potenciômetro + LED
+// ═══════════════════════════════════════════════════════</span>
+
+<span class="c-comment">// ── Definição dos pinos ──────────────────────────────</span>
+<span class="c-keyword">const int</span> <span class="c-var">pinoTrig</span> = <span class="c-number">9</span>;     <span class="c-comment">// HC-SR04 TRIG</span>
+<span class="c-keyword">const int</span> <span class="c-var">pinoEcho</span> = <span class="c-number">8</span>;     <span class="c-comment">// HC-SR04 ECHO</span>
+<span class="c-keyword">const int</span> <span class="c-var">pinoLED</span>  = <span class="c-number">13</span>;    <span class="c-comment">// LED de saída</span>
+<span class="c-keyword">const int</span> <span class="c-var">pinoPOT</span>  = <span class="c-number">A0</span>;    <span class="c-comment">// Potenciômetro</span>
+
+<span class="c-comment">// ── Variáveis ────────────────────────────────────────</span>
+<span class="c-keyword">long</span>  <span class="c-var">duracao</span>     = <span class="c-number">0</span>;
+<span class="c-keyword">float</span> <span class="c-var">distancia</span>  = <span class="c-number">0</span>;
+<span class="c-keyword">int</span>   <span class="c-var">valorPOT</span>   = <span class="c-number">0</span>;
+<span class="c-keyword">float</span> <span class="c-var">limite</span>     = <span class="c-number">0</span>;
+
+<span class="c-comment">// ────────────────────────────────────────────────────</span>
+<span class="c-keyword">void</span> <span class="c-fn">setup</span>() {
+  <span class="c-fn">pinMode</span>(<span class="c-var">pinoTrig</span>, <span class="c-const">OUTPUT</span>);
+  <span class="c-fn">pinMode</span>(<span class="c-var">pinoEcho</span>, <span class="c-const">INPUT</span>);
+  <span class="c-fn">pinMode</span>(<span class="c-var">pinoLED</span>,  <span class="c-const">OUTPUT</span>);
+  <span class="c-fn">Serial</span>.<span class="c-fn">begin</span>(<span class="c-number">9600</span>);
+  <span class="c-fn">Serial</span>.<span class="c-fn">println</span>(<span class="c-string">"Sistema iniciado: Distância e Iluminação"</span>);
+}
+
+<span class="c-comment">// ── Função: medir distância (cm) ─────────────────────</span>
+<span class="c-keyword">float</span> <span class="c-fn">medirDistancia</span>() {
+  <span class="c-fn">digitalWrite</span>(<span class="c-var">pinoTrig</span>, <span class="c-const">LOW</span>);
+  <span class="c-fn">delayMicroseconds</span>(<span class="c-number">2</span>);
+  <span class="c-fn">digitalWrite</span>(<span class="c-var">pinoTrig</span>, <span class="c-const">HIGH</span>);
+  <span class="c-fn">delayMicroseconds</span>(<span class="c-number">10</span>);
+  <span class="c-fn">digitalWrite</span>(<span class="c-var">pinoTrig</span>, <span class="c-const">LOW</span>);
+
+  <span class="c-var">duracao</span> = <span class="c-fn">pulseIn</span>(<span class="c-var">pinoEcho</span>, <span class="c-const">HIGH</span>);
+  <span class="c-keyword">return</span> (<span class="c-var">duracao</span> * <span class="c-number">0.034</span>) / <span class="c-number">2.0</span>;
+}
+
+<span class="c-comment">// ────────────────────────────────────────────────────</span>
+<span class="c-keyword">void</span> <span class="c-fn">loop</span>() {
+  <span class="c-var">distancia</span> = <span class="c-fn">medirDistancia</span>();
+
+  <span class="c-comment">// Mapeia potenciômetro → limite em cm (10 a 100 cm)</span>
+  <span class="c-var">valorPOT</span> = <span class="c-fn">analogRead</span>(<span class="c-var">pinoPOT</span>);
+  <span class="c-var">limite</span>   = <span class="c-fn">map</span>(<span class="c-var">valorPOT</span>, <span class="c-number">0</span>, <span class="c-number">1023</span>, <span class="c-number">10</span>, <span class="c-number">100</span>);
+
+  <span class="c-fn">Serial</span>.<span class="c-fn">print</span>(<span class="c-string">"Distância: "</span>);
+  <span class="c-fn">Serial</span>.<span class="c-fn">print</span>(<span class="c-var">distancia</span>);
+  <span class="c-fn">Serial</span>.<span class="c-fn">print</span>(<span class="c-string">" cm | Limite: "</span>);
+  <span class="c-fn">Serial</span>.<span class="c-fn">print</span>(<span class="c-var">limite</span>);
+  <span class="c-fn">Serial</span>.<span class="c-fn">println</span>(<span class="c-string">" cm"</span>);
+
+  <span class="c-comment">// Se distância &lt; limite → LED ligado</span>
+  <span class="c-keyword">if</span> (<span class="c-var">distancia</span> &lt; <span class="c-var">limite</span>) {
+    <span class="c-fn">digitalWrite</span>(<span class="c-var">pinoLED</span>, <span class="c-const">HIGH</span>);
+    <span class="c-fn">Serial</span>.<span class="c-fn">println</span>(<span class="c-string">"[ON] Objeto próximo → LED LIGADO"</span>);
+  } <span class="c-keyword">else</span> {
+    <span class="c-fn">digitalWrite</span>(<span class="c-var">pinoLED</span>, <span class="c-const">LOW</span>);
+    <span class="c-fn">Serial</span>.<span class="c-fn">println</span>(<span class="c-string">"[OFF] Objeto distante → LED DESLIGADO"</span>);
+  }
+
+  <span class="c-fn">delay</span>(<span class="c-number">300</span>);
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== TRANSITION 02→03 ===================== -->
+    <div class="transition-block transition-block-purple" aria-hidden="true">
+      <div class="tb-inner">
+        <div class="tb-status">
+          <div class="tb-dot tb-dot-complete" style="background: var(--purple)"></div>
+          <span>SYSTEM 02 COMPLETED</span>
+        </div>
+        <div class="tb-line">
+          <div class="tb-line-progress" style="background: linear-gradient(90deg, var(--purple), var(--green))"></div>
+          <div class="tb-data-flow">
+            <span class="df-bit">0</span><span class="df-bit">1</span>
+            <span class="df-bit">1</span><span class="df-bit">0</span>
+            <span class="df-bit">1</span><span class="df-bit">1</span>
+          </div>
+        </div>
+        <div class="tb-next">
+          <span>NEXT MODULE</span>
+          <div class="tb-next-title">▼ ENVIRONMENT SYSTEM</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DESAFIO 03 ===================== -->
+    <section id="desafio03" class="section-challenge challenge-03 reveal-section" aria-label="Desafio 03 - Ambiente Inteligente">
+      <div class="challenge-bg-number" aria-hidden="true">03</div>
+      <div class="container">
+        <div class="challenge-header">
+          <div class="challenge-tag-line">
+            <div class="challenge-tag challenge-tag-green">DESAFIO 03</div>
+            <div class="challenge-system-id">SYSTEM / TEMPERATURE / HUMIDITY</div>
+          </div>
+          <h2 class="challenge-title">AMBIENTE<br><span class="accent-green">INTELIGENTE</span></h2>
+        </div>
+
+        <div class="challenge-body">
+          <!-- Objetivo -->
+          <div class="challenge-block reveal-item">
+            <div class="block-label">▸ OBJETIVO</div>
+            <p class="block-text">
+              O objetivo foi desenvolver um sistema de monitoramento utilizando sensores de <strong>temperatura</strong> e <strong>umidade</strong>. As condições identificadas pelo sistema são representadas visualmente por LEDs indicadores.
+            </p>
+          </div>
+
+          <!-- Painel de Condições -->
+          <div class="challenge-block reveal-item">
+            <div class="block-label">▸ PAINEL DE CONDIÇÕES</div>
+            <div class="conditions-grid">
+              <div class="condition-card cc-ok">
+                <div class="cc-indicator">
+                  <div class="cc-led cc-led-green"></div>
+                </div>
+                <div class="cc-content">
+                  <div class="cc-title">CONDIÇÃO ADEQUADA</div>
+                  <p class="cc-desc">Temperatura e umidade dentro das condições esperadas.</p>
+                  <div class="cc-status cc-status-ok">● NORMAL</div>
+                </div>
+              </div>
+
+              <div class="condition-card cc-hot">
+                <div class="cc-indicator">
+                  <div class="cc-led cc-led-red"></div>
+                </div>
+                <div class="cc-content">
+                  <div class="cc-title">TEMPERATURA ALTA</div>
+                  <p class="cc-desc">O LED vermelho representa temperatura acima do limite definido.</p>
+                  <div class="cc-status cc-status-hot">● ALERTA</div>
+                </div>
+              </div>
+
+              <div class="condition-card cc-dry">
+                <div class="cc-indicator">
+                  <div class="cc-led cc-led-yellow"></div>
+                </div>
+                <div class="cc-content">
+                  <div class="cc-title">UMIDADE BAIXA</div>
+                  <p class="cc-desc">O LED amarelo representa umidade abaixo do limite definido.</p>
+                  <div class="cc-status cc-status-dry">● ALERTA</div>
+                </div>
+              </div>
+
+              <div class="condition-card cc-dual">
+                <div class="cc-indicator cc-dual-leds">
+                  <div class="cc-led cc-led-red"></div>
+                  <div class="cc-led cc-led-yellow"></div>
+                </div>
+                <div class="cc-content">
+                  <div class="cc-title">ALERTA DUPLO</div>
+                  <p class="cc-desc">Temperatura alta e umidade baixa ao mesmo tempo.</p>
+                  <div class="cc-status cc-status-dual">● CRÍTICO</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fluxo de Decisão -->
+          <div class="challenge-block reveal-item">
+            <div class="block-label">▸ FLUXO DE DECISÃO</div>
+            <div class="logic-area">
+              <div class="flow-diagram flow-03">
+                <div class="flow-03-sensors">
+                  <div class="flow-node flow-sensor" style="--node-color: var(--green)">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <circle cx="8" cy="8" r="4" stroke="currentColor" stroke-width="1.5"/>
+                      <path d="M8 1V4M8 12V15M1 8H4M12 8H15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    SENSOR DE TEMPERATURA
+                  </div>
+                  <div class="flow-node flow-sensor" style="--node-color: var(--green)">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <path d="M8 2 Q12 8 8 14 Q4 8 8 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                    </svg>
+                    SENSOR DE UMIDADE
+                  </div>
+                </div>
+                <div class="flow-arrow" style="color: var(--green)">↓</div>
+                <div class="flow-node flow-process" style="--node-color: var(--green)">
+                  <span>PROCESSAMENTO</span>
+                </div>
+                <div class="flow-arrow" style="color: var(--green)">↓</div>
+                <div class="flow-node flow-decision" style="--node-color: var(--green)">
+                  <span>STATUS DO AMBIENTE</span>
+                </div>
+                <div class="flow-03-outputs">
+                  <div class="fo3-branch">
+                    <div class="fo3-dot fo3-dot-green"></div>
+                    <span>NORMAL</span>
+                  </div>
+                  <div class="fo3-branch">
+                    <div class="fo3-dot fo3-dot-yellow"></div>
+                    <span>ALERTA</span>
+                  </div>
+                  <div class="fo3-branch">
+                    <div class="fo3-dot fo3-dot-red"></div>
+                    <span>DUPLO<br>ALERTA</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video -->
+          <div class="challenge-block reveal-item">
+            <div class="block-label">▸ DEMONSTRAÇÃO</div>
+            <div class="video-player-wrapper">
+              <div class="video-player-frame vpf-green">
+                <div class="vpf-corner vpf-tl"></div>
+                <div class="vpf-corner vpf-tr"></div>
+                <div class="vpf-corner vpf-bl"></div>
+                <div class="vpf-corner vpf-br"></div>
+                <div class="vpf-header">
+                  <span class="vpf-dot vpf-red"></span>
+                  <span class="vpf-dot vpf-yellow"></span>
+                  <span class="vpf-dot vpf-green"></span>
+                  <span class="vpf-title">DEMO_03 — AMBIENTE INTELIGENTE</span>
+                </div>
+                <video
+                  controls
+                  preload="metadata"
+                  class="challenge-video"
+                  aria-label="Demonstração do Desafio 03 - Ambiente Inteligente"
+                >
+                  <source src="videos/3.mp4" type="video/mp4" />
+                  <p>Seu navegador não suporta reprodução de vídeo. <a href="videos/3.mp4">Baixe o vídeo</a>.</p>
+                </video>
+              </div>
+            </div>
+          </div>
+
+          <!-- Código -->
+          <div class="challenge-block reveal-item">
+            <div class="block-label">▸ CÓDIGO</div>
+            <div class="code-editor-wrapper" id="code-editor-03">
+              <div class="ce-header">
+                <div class="ce-dots">
+                  <span class="ce-dot" style="background:#ff5f56"></span>
+                  <span class="ce-dot" style="background:#ffbd2e"></span>
+                  <span class="ce-dot" style="background:#27c93f"></span>
+                </div>
+                <span class="ce-filename">desafio_03_ambiente.ino</span>
+                <div class="ce-actions">
+                  <button class="btn-expand" data-target="code-03" aria-label="Expandir/recolher código" aria-expanded="false">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 5V1H5M9 1H13V5M13 9V13H9M5 13H1V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    <span>EXPANDIR</span>
+                  </button>
+                  <button class="btn-copy" data-target="code-03-content" aria-label="Copiar código do Desafio 03">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="4" y="4" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 4V2.5C10 1.67 9.33 1 8.5 1H1.5C0.67 1 0 1.67 0 2.5V9.5C0 10.33 0.67 11 1.5 11H4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    <span>COPIAR</span>
+                  </button>
+                </div>
+              </div>
+              <div class="ce-body collapsed" id="code-03">
+                <pre class="ce-pre" id="code-03-content" aria-label="Código do Desafio 03"><code class="code-arduino"><span class="c-comment">// ═══════════════════════════════════════════════════════
+// DESAFIO 03 — AMBIENTE INTELIGENTE
+// Sensor DHT (Temperatura + Umidade) + LEDs indicadores
+// ═══════════════════════════════════════════════════════</span>
+
+<span class="c-comment">// ── Biblioteca necessária: DHT sensor library ────────</span>
+<span class="c-preprocessor">#include</span> <span class="c-string">&lt;DHT.h&gt;</span>
+
+<span class="c-comment">// ── Definição dos pinos ──────────────────────────────</span>
+<span class="c-preprocessor">#define</span> <span class="c-const">PINO_DHT</span>        <span class="c-number">4</span>    <span class="c-comment">// Pino de dados do DHT</span>
+<span class="c-preprocessor">#define</span> <span class="c-const">TIPO_DHT</span>     <span class="c-const">DHT11</span>   <span class="c-comment">// ou DHT22</span>
+
+<span class="c-keyword">const int</span> <span class="c-var">pinoLedVerde</span>    = <span class="c-number">10</span>;  <span class="c-comment">// Condição adequada</span>
+<span class="c-keyword">const int</span> <span class="c-var">pinoLedVermelho</span> = <span class="c-number">11</span>;  <span class="c-comment">// Temperatura alta</span>
+<span class="c-keyword">const int</span> <span class="c-var">pinoLedAmarelo</span>  = <span class="c-number">12</span>;  <span class="c-comment">// Umidade baixa</span>
+
+<span class="c-comment">// ── Limites de referência ────────────────────────────</span>
+<span class="c-keyword">const float</span> <span class="c-var">TEMP_MAX</span> = <span class="c-number">30.0</span>;   <span class="c-comment">// °C — acima = alerta</span>
+<span class="c-keyword">const float</span> <span class="c-var">UMID_MIN</span> = <span class="c-number">40.0</span>;   <span class="c-comment">// %  — abaixo = alerta</span>
+
+<span class="c-comment">// ── Instância do sensor ──────────────────────────────</span>
+<span class="c-const">DHT</span> <span class="c-var">dht</span>(<span class="c-const">PINO_DHT</span>, <span class="c-const">TIPO_DHT</span>);
+
+<span class="c-comment">// ── Variáveis de leitura ─────────────────────────────</span>
+<span class="c-keyword">float</span> <span class="c-var">temperatura</span> = <span class="c-number">0</span>;
+<span class="c-keyword">float</span> <span class="c-var">umidade</span>    = <span class="c-number">0</span>;
+
+<span class="c-comment">// ────────────────────────────────────────────────────</span>
+<span class="c-keyword">void</span> <span class="c-fn">setup</span>() {
+  <span class="c-fn">pinMode</span>(<span class="c-var">pinoLedVerde</span>,    <span class="c-const">OUTPUT</span>);
+  <span class="c-fn">pinMode</span>(<span class="c-var">pinoLedVermelho</span>, <span class="c-const">OUTPUT</span>);
+  <span class="c-fn">pinMode</span>(<span class="c-var">pinoLedAmarelo</span>,  <span class="c-const">OUTPUT</span>);
+  <span class="c-var">dht</span>.<span class="c-fn">begin</span>();
+  <span class="c-fn">Serial</span>.<span class="c-fn">begin</span>(<span class="c-number">9600</span>);
+  <span class="c-fn">Serial</span>.<span class="c-fn">println</span>(<span class="c-string">"Sistema iniciado: Ambiente Inteligente"</span>);
+}
+
+<span class="c-comment">// ── Função: desligar todos os LEDs ───────────────────</span>
+<span class="c-keyword">void</span> <span class="c-fn">desligarTodos</span>() {
+  <span class="c-fn">digitalWrite</span>(<span class="c-var">pinoLedVerde</span>,    <span class="c-const">LOW</span>);
+  <span class="c-fn">digitalWrite</span>(<span class="c-var">pinoLedVermelho</span>, <span class="c-const">LOW</span>);
+  <span class="c-fn">digitalWrite</span>(<span class="c-var">pinoLedAmarelo</span>,  <span class="c-const">LOW</span>);
+}
+
+<span class="c-comment">// ────────────────────────────────────────────────────</span>
+<span class="c-keyword">void</span> <span class="c-fn">loop</span>() {
+  <span class="c-var">temperatura</span> = <span class="c-var">dht</span>.<span class="c-fn">readTemperature</span>();
+  <span class="c-var">umidade</span>    = <span class="c-var">dht</span>.<span class="c-fn">readHumidity</span>();
+
+  <span class="c-comment">// Verificação de leitura válida</span>
+  <span class="c-keyword">if</span> (<span class="c-fn">isnan</span>(<span class="c-var">temperatura</span>) || <span class="c-fn">isnan</span>(<span class="c-var">umidade</span>)) {
+    <span class="c-fn">Serial</span>.<span class="c-fn">println</span>(<span class="c-string">"Erro na leitura do sensor DHT!"</span>);
+    <span class="c-fn">desligarTodos</span>();
+    <span class="c-fn">delay</span>(<span class="c-number">2000</span>);
+    <span class="c-keyword">return</span>;
+  }
+
+  <span class="c-fn">Serial</span>.<span class="c-fn">print</span>(<span class="c-string">"Temp: "</span>); <span class="c-fn">Serial</span>.<span class="c-fn">print</span>(<span class="c-var">temperatura</span>);
+  <span class="c-fn">Serial</span>.<span class="c-fn">print</span>(<span class="c-string">" °C | Umidade: "</span>); <span class="c-fn">Serial</span>.<span class="c-fn">println</span>(<span class="c-var">umidade</span>);
+
+  <span class="c-fn">desligarTodos</span>();
+
+  <span class="c-keyword">bool</span> <span class="c-var">tempAlta</span> = (<span class="c-var">temperatura</span> &gt; <span class="c-var">TEMP_MAX</span>);
+  <span class="c-keyword">bool</span> <span class="c-var">umidBaixa</span> = (<span class="c-var">umidade</span> &lt; <span class="c-var">UMID_MIN</span>);
+
+  <span class="c-keyword">if</span> (!<span class="c-var">tempAlta</span> &amp;&amp; !<span class="c-var">umidBaixa</span>) {
+    <span class="c-fn">digitalWrite</span>(<span class="c-var">pinoLedVerde</span>, <span class="c-const">HIGH</span>);     <span class="c-comment">// Condição adequada</span>
+    <span class="c-fn">Serial</span>.<span class="c-fn">println</span>(<span class="c-string">"[OK] Ambiente normal"</span>);
+  } <span class="c-keyword">else</span> {
+    <span class="c-keyword">if</span> (<span class="c-var">tempAlta</span>)  <span class="c-fn">digitalWrite</span>(<span class="c-var">pinoLedVermelho</span>, <span class="c-const">HIGH</span>);
+    <span class="c-keyword">if</span> (<span class="c-var">umidBaixa</span>) <span class="c-fn">digitalWrite</span>(<span class="c-var">pinoLedAmarelo</span>,  <span class="c-const">HIGH</span>);
+    <span class="c-fn">Serial</span>.<span class="c-fn">println</span>(<span class="c-string">"[ALERTA] Condição fora do esperado"</span>);
+  }
+
+  <span class="c-fn">delay</span>(<span class="c-number">2000</span>);  <span class="c-comment">// DHT precisa de intervalo mínimo</span>
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== RESULTADOS ===================== -->
+    <section id="resultados" class="section-results reveal-section" aria-label="Resultados do projeto">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag">ANÁLISE FINAL</div>
+          <h2 class="section-title">RESULTADOS DO PROJETO</h2>
+        </div>
+
+        <div class="results-layout">
+          <!-- Timeline -->
+          <div class="results-timeline">
+            <div class="rt-item reveal-item">
+              <div class="rt-node rt-node-01">
+                <span>01</span>
+              </div>
+              <div class="rt-content">
+                <div class="rt-title">ILUMINAÇÃO INTELIGENTE</div>
+                <div class="rt-tags">
+                  <span class="rt-tag">PIR</span>
+                  <span class="rt-tag">LDR</span>
+                  <span class="rt-tag">LED</span>
+                </div>
+              </div>
+            </div>
+            <div class="rt-connector" aria-hidden="true">
+              <div class="rt-connector-line"></div>
+            </div>
+            <div class="rt-item reveal-item">
+              <div class="rt-node rt-node-02">
+                <span>02</span>
+              </div>
+              <div class="rt-content">
+                <div class="rt-title">DISTÂNCIA E ILUMINAÇÃO</div>
+                <div class="rt-tags">
+                  <span class="rt-tag" style="border-color: var(--purple); color: var(--purple)">HC-SR04</span>
+                  <span class="rt-tag" style="border-color: var(--purple); color: var(--purple)">POT</span>
+                  <span class="rt-tag" style="border-color: var(--purple); color: var(--purple)">LED</span>
+                </div>
+              </div>
+            </div>
+            <div class="rt-connector" aria-hidden="true">
+              <div class="rt-connector-line" style="background: var(--green)"></div>
+            </div>
+            <div class="rt-item reveal-item">
+              <div class="rt-node rt-node-03">
+                <span>03</span>
+              </div>
+              <div class="rt-content">
+                <div class="rt-title">AMBIENTE INTELIGENTE</div>
+                <div class="rt-tags">
+                  <span class="rt-tag" style="border-color: var(--green); color: var(--green)">DHT</span>
+                  <span class="rt-tag" style="border-color: var(--green); color: var(--green)">LEDs</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Info Panels -->
+          <div class="results-info">
+            <div class="ri-panel reveal-item">
+              <div class="rip-header">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                  <circle cx="9" cy="9" r="4" stroke="#00d4ff" stroke-width="1.5"/>
+                  <path d="M9 1V4M9 14V17M1 9H4M14 9H17" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                SENSORES UTILIZADOS
+              </div>
+              <ul class="rip-list">
+                <li><span class="rip-dot" style="background:#00d4ff"></span>Sensor PIR</li>
+                <li><span class="rip-dot" style="background:#00d4ff"></span>Sensor LDR</li>
+                <li><span class="rip-dot" style="background:#a855f7"></span>Sensor Ultrassônico (HC-SR04)</li>
+                <li><span class="rip-dot" style="background:#a855f7"></span>Potenciômetro</li>
+                <li><span class="rip-dot" style="background:#22c55e"></span>Sensor de Temperatura (DHT)</li>
+                <li><span class="rip-dot" style="background:#22c55e"></span>Sensor de Umidade (DHT)</li>
+              </ul>
+            </div>
+
+            <div class="ri-panel reveal-item">
+              <div class="rip-header">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                  <rect x="2" y="2" width="14" height="14" rx="2" stroke="#00d4ff" stroke-width="1.5"/>
+                  <path d="M5 9H13M9 5V13" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                CONCEITOS TRABALHADOS
+              </div>
+              <ul class="rip-list">
+                <li><span class="rip-dot" style="background:#00d4ff"></span>Leitura de sensores</li>
+                <li><span class="rip-dot" style="background:#00d4ff"></span>Entradas analógicas</li>
+                <li><span class="rip-dot" style="background:#00d4ff"></span>Entradas digitais</li>
+                <li><span class="rip-dot" style="background:#00d4ff"></span>Condições lógicas</li>
+                <li><span class="rip-dot" style="background:#00d4ff"></span>Estruturas condicionais</li>
+                <li><span class="rip-dot" style="background:#00d4ff"></span>Controle de LEDs</li>
+                <li><span class="rip-dot" style="background:#00d4ff"></span>Automação</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CONCLUSÃO ===================== -->
+    <section class="section-conclusion reveal-section" aria-label="Conclusão do projeto">
+      <div class="container">
+        <div class="conclusion-inner">
+          <div class="conclusion-text">
+            <div class="section-tag">CONCLUSÃO</div>
+            <h2 class="conclusion-title">DO SENSOR<br>À <span class="accent">DECISÃO</span></h2>
+            <p class="conclusion-desc">
+              Ao longo dos três desafios, foram desenvolvidos sistemas capazes de receber informações do ambiente, processar essas informações por meio da programação e executar respostas automatizadas.
+            </p>
+          </div>
+
+          <div class="conclusion-flow">
+            <div class="cf-step reveal-item" data-delay="0">
+              <div class="cf-icon">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+                  <circle cx="14" cy="14" r="6" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M14 2V6M14 22V26M2 14H6M22 14H26" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="cf-label">DETECTAR</div>
+              <div class="cf-desc">Sensores captam informações do ambiente</div>
+            </div>
+            <div class="cf-arrow-vert" aria-hidden="true">
+              <div class="cf-arrow-line"></div>
+              <span>↓</span>
+            </div>
+            <div class="cf-step reveal-item" data-delay="100">
+              <div class="cf-icon">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+                  <rect x="4" y="4" width="20" height="20" rx="4" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M9 14h10M14 9v10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="cf-label">ANALISAR</div>
+              <div class="cf-desc">Código processa e compara os dados</div>
+            </div>
+            <div class="cf-arrow-vert" aria-hidden="true">
+              <div class="cf-arrow-line"></div>
+              <span>↓</span>
+            </div>
+            <div class="cf-step reveal-item" data-delay="200">
+              <div class="cf-icon">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+                  <path d="M14 4L24 22H4L14 4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                  <line x1="14" y1="12" x2="14" y2="17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <circle cx="14" cy="20" r="1" fill="currentColor"/>
+                </svg>
+              </div>
+              <div class="cf-label">DECIDIR</div>
+              <div class="cf-desc">Lógica condicional determina a ação</div>
+            </div>
+            <div class="cf-arrow-vert" aria-hidden="true">
+              <div class="cf-arrow-line"></div>
+              <span>↓</span>
+            </div>
+            <div class="cf-step reveal-item" data-delay="300">
+              <div class="cf-icon">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+                  <circle cx="14" cy="14" r="8" stroke="currentColor" stroke-width="1.5"/>
+                  <circle cx="14" cy="14" r="3" fill="currentColor" opacity="0.8"/>
+                  <path d="M14 4C9 4 5 8 5 13" stroke="currentColor" stroke-width="1" opacity="0.4" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="cf-label">AGIR</div>
+              <div class="cf-desc">LEDs respondem ao estado do sistema</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <span class="footer-bracket">[</span>ISL<span class="footer-bracket">]</span>
+          </div>
+          <p class="footer-title">ATIVIDADE PRÁTICA DE ARDUINO</p>
+          <p class="footer-sub">SISTEMAS INTELIGENTES E AUTOMAÇÃO</p>
+        </div>
+        <div class="footer-status">
+          <div class="fs-dot"></div>
+          <span>STATUS: PROJECT COMPLETED ✓</span>
+        </div>
+      </div>
+      <div class="footer-author">
+        <span class="footer-author-label">DESENVOLVIDO POR</span>
+        <span class="footer-author-name">Santiago Fidmay</span>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ===================== BACK TO TOP ===================== -->
+  <button id="back-to-top" class="back-to-top" aria-label="Voltar ao topo da página" title="Voltar ao topo">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path d="M10 16V4M10 4L5 9M10 4L15 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
