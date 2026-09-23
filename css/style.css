@@ -26,6 +26,14 @@
   --green-dim:    rgba(34, 197, 94, 0.15);
   --green-glow:   rgba(34, 197, 94, 0.3);
 
+  --orange:       #f97316;
+  --orange-dim:   rgba(249, 115, 22, 0.15);
+  --orange-glow:  rgba(249, 115, 22, 0.3);
+
+  --rose:         #f43f5e;
+  --rose-dim:     rgba(244, 63, 94, 0.15);
+  --rose-glow:    rgba(244, 63, 94, 0.3);
+
   --yellow:       #f59e0b;
   --yellow-dim:   rgba(245, 158, 11, 0.15);
 
@@ -107,6 +115,8 @@ body {
 .accent        { color: var(--cyan); }
 .accent-purple { color: var(--purple); }
 .accent-green  { color: var(--green); }
+.accent-orange { color: var(--orange); }
+.accent-rose   { color: var(--rose); }
 
 strong { color: var(--cyan); font-weight: 600; }
 
@@ -1057,6 +1067,18 @@ a:focus-visible {
   border-color: rgba(34,197,94,0.25);
 }
 
+.challenge-tag-orange {
+  color: var(--orange);
+  background: var(--orange-dim);
+  border-color: rgba(249,115,22,0.25);
+}
+
+.challenge-tag-rose {
+  color: var(--rose);
+  background: var(--rose-dim);
+  border-color: rgba(244,63,94,0.25);
+}
+
 .challenge-system-id {
   font-family: var(--font-mono);
   font-size: 0.68rem;
@@ -1513,6 +1535,8 @@ a:focus-visible {
 
 .vpf-purple { border-color: rgba(168,85,247,0.25); box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(168,85,247,0.06); }
 .vpf-green  { border-color: rgba(34,197,94,0.25);  box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(34,197,94,0.06); }
+.vpf-orange { border-color: rgba(249,115,22,0.25); box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(249,115,22,0.06); }
+.vpf-rose   { border-color: rgba(244,63,94,0.25);  box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(244,63,94,0.06); }
 
 .vpf-corner {
   position: absolute;
@@ -1525,6 +1549,8 @@ a:focus-visible {
 
 .vpf-purple .vpf-corner { border-color: var(--purple); }
 .vpf-green  .vpf-corner { border-color: var(--green); }
+.vpf-orange .vpf-corner { border-color: var(--orange); }
+.vpf-rose   .vpf-corner { border-color: var(--rose); }
 
 .vpf-tl { top: 4px; left: 4px; border-width: 1.5px 0 0 1.5px; }
 .vpf-tr { top: 4px; right: 4px; border-width: 1.5px 1.5px 0 0; }

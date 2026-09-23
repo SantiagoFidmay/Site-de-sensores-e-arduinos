@@ -63,6 +63,8 @@
           <li><a href="#desafio01" class="nav-link" data-section="desafio01">Desafio 01</a></li>
           <li><a href="#desafio02" class="nav-link" data-section="desafio02">Desafio 02</a></li>
           <li><a href="#desafio03" class="nav-link" data-section="desafio03">Desafio 03</a></li>
+          <li><a href="#desafio04" class="nav-link" data-section="desafio04">Desafio 04</a></li>
+          <li><a href="#desafio05" class="nav-link" data-section="desafio05">Desafio 05</a></li>
           <li><a href="#resultados" class="nav-link" data-section="resultados">Resultados</a></li>
         </ul>
       </nav>
@@ -92,8 +94,14 @@
             <li><a href="#desafio03" class="mobile-nav-link">
               <span class="mnl-num">03</span>Ambiente Inteligente
             </a></li>
+            <li><a href="#desafio04" class="mobile-nav-link">
+              <span class="mnl-num">04</span>Sistema PIR
+            </a></li>
+            <li><a href="#desafio05" class="mobile-nav-link">
+              <span class="mnl-num">05</span>Medidor de Proximidade
+            </a></li>
             <li><a href="#resultados" class="mobile-nav-link">
-              <span class="mnl-num">04</span>Resultados
+              <span class="mnl-num">06</span>Resultados
             </a></li>
           </ul>
         </nav>
@@ -994,6 +1002,160 @@
 
   <span class="c-fn">delay</span>(<span class="c-number">2000</span>);  <span class="c-comment">// DHT precisa de intervalo mínimo</span>
 }</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== TRANSITION 03→04 ===================== -->
+    <div class="transition-block" aria-hidden="true">
+      <div class="tb-inner">
+        <div class="tb-status">
+          <div class="tb-dot tb-dot-complete" style="background: var(--green)"></div>
+          <span>SYSTEM 03 COMPLETED</span>
+        </div>
+        <div class="tb-line">
+          <div class="tb-line-progress" style="background: linear-gradient(90deg, var(--green), #ff5f56)"></div>
+          <div class="tb-data-flow">
+            <span class="df-bit">1</span><span class="df-bit">1</span>
+            <span class="df-bit">0</span><span class="df-bit">0</span>
+            <span class="df-bit">1</span><span class="df-bit">0</span>
+          </div>
+        </div>
+        <div class="tb-next">
+          <span>NEXT MODULE</span>
+          <div class="tb-next-title">▼ PRESENCE SYSTEM</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DESAFIO 04 ===================== -->
+    <section id="desafio04" class="section-challenge challenge-04 reveal-section" aria-label="Desafio 04 - Detecção de Presença PIR">
+      <div class="challenge-bg-number" aria-hidden="true">04</div>
+      <div class="container">
+        <div class="challenge-header">
+          <div class="challenge-tag-line">
+            <div class="challenge-tag" style="border-color: #ff5f56; color: #ff5f56">DESAFIO 04</div>
+            <div class="challenge-system-id">SYSTEM / PRESENCE</div>
+          </div>
+          <h2 class="challenge-title">DETECÇÃO DE PRESENÇA<br><span class="accent" style="color: #ff5f56">COM SENSOR PIR</span></h2>
+        </div>
+
+        <div class="challenge-body">
+          <div class="challenge-block reveal-item">
+            <div class="block-label">▸ OBJETIVO E FUNCIONAMENTO</div>
+            <p class="block-text">
+              <strong>Sistema de Detecção de Presença com Sensor PIR</strong><br>
+              Neste projeto, foi desenvolvido um sistema de automação voltado para a detecção de movimento em tempo real.<br><br>
+              <strong>Componentes Utilizados:</strong> Placa Arduino Uno, sensor infravermelho passivo (PIR), LED indicador, protoboard, resistor e cabos jumper.<br><br>
+              <strong>Funcionamento e Código:</strong> O programa lê o estado do pino digital conectado ao sensor PIR. Quando o sensor detecta movimentação no ambiente, o sinal é alterado para nível alto (HIGH), acionando o LED como indicador visual.<br><br>
+              <strong>Aplicações Práticas:</strong> Iluminação automática residencial, sistemas de alarme e controle de acesso patrimonial.
+            </p>
+          </div>
+
+          <!-- Video -->
+          <div class="challenge-block reveal-item">
+            <div class="block-label">▸ DEMONSTRAÇÃO</div>
+            <div class="video-player-wrapper">
+              <div class="video-player-frame" style="border-color: #ff5f56;">
+                <div class="vpf-corner vpf-tl"></div>
+                <div class="vpf-corner vpf-tr"></div>
+                <div class="vpf-corner vpf-bl"></div>
+                <div class="vpf-corner vpf-br"></div>
+                <div class="vpf-header">
+                  <span class="vpf-dot vpf-red"></span>
+                  <span class="vpf-dot vpf-yellow"></span>
+                  <span class="vpf-dot vpf-green"></span>
+                  <span class="vpf-title">DEMO_04 — DETECÇÃO DE PRESENÇA</span>
+                </div>
+                <video
+                  controls
+                  preload="metadata"
+                  class="challenge-video"
+                  aria-label="Demonstração do Desafio 04 - Sensor PIR"
+                >
+                  <source src="videos/4.mp4" type="video/mp4" />
+                  <p>Seu navegador não suporta reprodução de vídeo. <a href="videos/4.mp4">Baixe o vídeo</a>.</p>
+                </video>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== TRANSITION 04→05 ===================== -->
+    <div class="transition-block" aria-hidden="true">
+      <div class="tb-inner">
+        <div class="tb-status">
+          <div class="tb-dot tb-dot-complete" style="background: #ff5f56"></div>
+          <span>SYSTEM 04 COMPLETED</span>
+        </div>
+        <div class="tb-line">
+          <div class="tb-line-progress" style="background: linear-gradient(90deg, #ff5f56, #ffbd2e)"></div>
+          <div class="tb-data-flow">
+            <span class="df-bit">0</span><span class="df-bit">1</span>
+            <span class="df-bit">0</span><span class="df-bit">1</span>
+            <span class="df-bit">1</span><span class="df-bit">1</span>
+          </div>
+        </div>
+        <div class="tb-next">
+          <span>NEXT MODULE</span>
+          <div class="tb-next-title">▼ PROXIMITY SYSTEM</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== DESAFIO 05 ===================== -->
+    <section id="desafio05" class="section-challenge challenge-05 reveal-section" aria-label="Desafio 05 - Medição de Proximidade">
+      <div class="challenge-bg-number" aria-hidden="true">05</div>
+      <div class="container">
+        <div class="challenge-header">
+          <div class="challenge-tag-line">
+            <div class="challenge-tag" style="border-color: #ffbd2e; color: #ffbd2e">DESAFIO 05</div>
+            <div class="challenge-system-id">SYSTEM / PROXIMITY</div>
+          </div>
+          <h2 class="challenge-title">MEDIÇÃO DE PROXIMIDADE<br><span class="accent" style="color: #ffbd2e">COM ULTRASSÔNICO E POTENCIÔMETRO</span></h2>
+        </div>
+
+        <div class="challenge-body">
+          <div class="challenge-block reveal-item">
+            <div class="block-label">▸ OBJETIVO E FUNCIONAMENTO</div>
+            <p class="block-text">
+              <strong>Sistema de Medição de Proximidade com Sensor Ultrassônico e Potenciômetro</strong><br>
+              Este experimento demonstra um medidor e alerta de distância com calibração analógica.<br><br>
+              <strong>Componentes Utilizados:</strong> Placa Arduino Uno, sensor ultrassônico de distância (HC-SR04), potenciômetro, LED indicador, protoboard, resistor e cabos jumper.<br><br>
+              <strong>Funcionamento e Código:</strong> O sensor ultrassônico calcula a distância enviando um pulso sonoro pelo pino de disparo (Trig) e cronometrando o tempo de retorno pelo pino de eco (Echo). O potenciômetro conectado à entrada analógica permite calibrar os limiares de acionamento. Ao aproximar um objeto a uma distância menor que o limite definido (distância crítica), o circuito aciona o LED de alerta.<br><br>
+              <strong>Aplicações Práticas:</strong> Sensores de estacionamento veicular, detecção de obstáculos em robótica e monitoramento de níveis em reservatórios.
+            </p>
+          </div>
+
+          <!-- Video -->
+          <div class="challenge-block reveal-item">
+            <div class="block-label">▸ DEMONSTRAÇÃO</div>
+            <div class="video-player-wrapper">
+              <div class="video-player-frame" style="border-color: #ffbd2e;">
+                <div class="vpf-corner vpf-tl"></div>
+                <div class="vpf-corner vpf-tr"></div>
+                <div class="vpf-corner vpf-bl"></div>
+                <div class="vpf-corner vpf-br"></div>
+                <div class="vpf-header">
+                  <span class="vpf-dot vpf-red"></span>
+                  <span class="vpf-dot vpf-yellow"></span>
+                  <span class="vpf-dot vpf-green"></span>
+                  <span class="vpf-title">DEMO_05 — MEDIÇÃO DE PROXIMIDADE</span>
+                </div>
+                <video
+                  controls
+                  preload="metadata"
+                  class="challenge-video"
+                  aria-label="Demonstração do Desafio 05 - Ultrassônico e Potenciômetro"
+                >
+                  <source src="videos/5.mp4" type="video/mp4" />
+                  <p>Seu navegador não suporta reprodução de vídeo. <a href="videos/5.mp4">Baixe o vídeo</a>.</p>
+                </video>
               </div>
             </div>
           </div>
